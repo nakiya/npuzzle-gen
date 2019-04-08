@@ -17,3 +17,10 @@
               (-> db
                   (assoc :size size)
                   (assoc :puzzle rnd-puzzle)))))
+
+(re-frame/reg-event-db
+ ::move-tile
+ (fn-traced [db [_ tile-index]]
+            (let [coords (pzl/index->row-col (:puzzle db) tile-index)
+                  npz (pzl/move (:puzzle db) coords)]
+              (assoc db :puzzle npz))))

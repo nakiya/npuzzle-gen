@@ -3,5 +3,4 @@
             [garden.units :as u :refer [px pt]]))
 
 (defstyles screen
-  [:h1 {:color "red"}]
-)
+  [:h1 {:color "red"}])
