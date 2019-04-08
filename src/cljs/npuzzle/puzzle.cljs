@@ -47,12 +47,13 @@
 (defn inversions [puzzle]
   (let [size (get-size puzzle)
         tiles (get-tiles puzzle)
-        inversions-fn (fn [remaining-tiles found-tiles inversions]
-                        (if-let [i (first remaining-tiles)]
-                          (recur (rest remaining-tiles)
-                                 (conj found-tiles i)
-                                 (+ inversions (- (dec i) (count (filter found-tiles (range i))))))
-                          inversions))]
+        inversions-fn
+        (fn [remaining-tiles found-tiles inversions]
+          (if-let [i (first remaining-tiles)]
+            (recur (rest remaining-tiles)
+                   (conj found-tiles i)
+                   (+ inversions (- (dec i) (count (filter found-tiles (range i))))))
+            inversions))]
     (inversions-fn (remove #{:space} tiles) #{} 0)))
 
 (defn is-solvable? [puzzle]
@@ -102,4 +103,3 @@
    (if (> num-moves 0)
      (recur (random-move puzzle) (dec num-moves))
      puzzle)))
-

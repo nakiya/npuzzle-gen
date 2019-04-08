@@ -1,6 +1,7 @@
 (ns npuzzle.css
-  (:require [garden.def :refer [defstyles]]))
+  (:require [garden.def :refer [defstyles]]
+            [garden.units :as u :refer [px pt]]))
 
 (defstyles screen
-  [:body {:color "red"}]
+  [:h1 {:color "red"}]
 )

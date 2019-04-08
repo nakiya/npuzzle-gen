@@ -51,6 +51,8 @@
     (testing "shuffle-puzzle"
       (is (pzl/is-solvable? (pzl/shuffle-puzzle (pzl/make-puzzle 4))))
       (is (pzl/is-solvable? (pzl/shuffle-puzzle (pzl/make-puzzle 6))))
-      (is (pzl/is-solvable? (pzl/shuffle-puzzle (pzl/make-puzzle 9)))))))
+      (is (pzl/is-solvable? (pzl/shuffle-puzzle (pzl/make-puzzle 9))))
+      (is (not= (pzl/shuffle-puzzle (pzl/make-puzzle 3)) (pzl/make-puzzle 3)))
+      (is (not= (pzl/shuffle-puzzle (pzl/make-puzzle 8)) (pzl/make-puzzle 8))))))
 
 (run-tests)
