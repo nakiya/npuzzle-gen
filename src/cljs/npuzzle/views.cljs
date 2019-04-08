@@ -27,7 +27,7 @@
               (into [:option {:value size} size])))]
      (into [:div {:style {:display :inline-grid
                           :grid-template-columns (apply str (repeat @current-size "auto "))
-                          :grid-gap "10px"
+                          :grid-gap "2px"
                           :border "2px solid black"}}]
            (map-indexed
              (fn [idx tile]
