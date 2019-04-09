@@ -21,7 +21,7 @@
                    :padding "15px"
                    :font-size "20px"
                    :border (if (not= :space tile) "1px solid black" :none)
-                   :background (if (not= :space tile) :lightblue nil)
+                   :background (if (not= :space tile) :burlywood nil)
                    :height "60px"
                    :width "60px"
                    ;;cursor = default for disabling caret on hover over text
