@@ -21,6 +21,8 @@
                    :padding "15px"
                    :font-size "20px"
                    :border (if (not= :space tile) "1px solid black" :none)
+                   :border-radius "5px"
+                   :box-shadow (if (not= :space tile) "3px 3px 3px 3px #888888" :none)
                    :background (if (not= :space tile) :burlywood nil)
                    :height "60px"
                    :width "60px"
@@ -33,13 +35,20 @@
        tile)]))
 
 (defn- tiles-container [puzzle size tile-fn]
-  (into [:div {:style {:display :inline-grid
-                       :grid-template-columns (apply str (repeat size "auto "))
-                       :grid-gap "5px"
-                       :border "2px solid black"}}]
-        (map-indexed
-         (fn [idx tile]
-           (tile-fn idx tile)) puzzle)))
+  [:div
+   {:style {:display :inline-grid
+            :border "3px solid tan"
+            :background :cornsilk
+            :padding "3px"}}
+   (into [:div {:style {:display :inline-grid
+                        :grid-template-columns (apply str (repeat size "auto "))
+                        :grid-gap "5px"
+                        :padding "6px"
+                        :background :blanchedalmond
+                        :border "2px solid wheat"}}]
+         (map-indexed
+          (fn [idx tile]
+            (tile-fn idx tile)) puzzle))])
 
 (defn- size-selector [sizes current-size]
   [:div.input-field.
@@ -52,8 +61,8 @@
 
 (defn- win-part []
   [:div
-   [:h2 {:style {:color :green}} "Solved!"]
-   [:button.waves-effect.waves-light.btn
+   [:h2 {:style {:color :darkgreen}} "Solved!"]
+   [:button.waves-effect.waves-light.btn.lime.darken-3
     {:onClick shuffle-again}
     "Play again"]])
 
@@ -64,12 +73,12 @@
         puzzle (re-frame/subscribe [::subs/puzzle])
         is-solved? (re-frame/subscribe [::subs/is-solved?])]
     [:div.container
-     [:h1 {:style {:color :skyblue}} "Hello to " @name]
+     [:h1 {:style {:color :darkkhaki}} "Hello to " @name]
      [:div
       {:style {:padding "10px"}}
       [:div.row
        [:div.col.s2 (size-selector @sizes @current-size)]]
-       [:button.waves-effect.waves-light.btn.
+       [:button.waves-effect.waves-light.btn.lime.darken-3
         {:onClick shuffle-again} "Shuffle"]]
      (tiles-container @puzzle @current-size tile-div)
      (if @is-solved?

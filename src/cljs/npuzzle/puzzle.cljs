@@ -97,7 +97,7 @@
 (defn shuffle-puzzle
   "Shuffles by moving a random steps"
   ([puzzle]
-   (let [num-moves (+ 100 (rand 200))]
+   (let [num-moves (+ (* (get-size puzzle) 50) (rand 500))]
      (shuffle-puzzle puzzle num-moves)))
   ([puzzle num-moves]
    (if (> num-moves 0)
