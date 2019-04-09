@@ -4,6 +4,7 @@
    [npuzzle.subs :as subs]
    [npuzzle.events :as ev]))
 
+
 (defn- on-puzzle-size-changed [e]
   (re-frame/dispatch [::ev/change-puzzle-size (int (-> e .-target .-value))]))
 
@@ -21,8 +22,8 @@
                    :font-size "20px"
                    :border (if (not= :space tile) "1px solid black" :none)
                    :background (if (not= :space tile) :lightblue nil)
-                   :height "25px"
-                   :width "25px"
+                   :height "60px"
+                   :width "60px"
                    ;;cursor = default for disabling caret on hover over text
                    :cursor :default}
            :onMouseDown (if @is-solved? nil on-tile-mouse-down)
@@ -34,23 +35,27 @@
 (defn- tiles-container [puzzle size tile-fn]
   (into [:div {:style {:display :inline-grid
                        :grid-template-columns (apply str (repeat size "auto "))
-                       :grid-gap "2px"
+                       :grid-gap "5px"
                        :border "2px solid black"}}]
         (map-indexed
          (fn [idx tile]
            (tile-fn idx tile)) puzzle)))
 
 (defn- size-selector [sizes current-size]
-  (into [:select {:name "puzzle-size"
-                  :on-change on-puzzle-size-changed
-                  :defaultValue current-size}]
-        (for [size sizes]
-          (into [:option {:value size} size]))))
+  [:div.input-field.
+   (into [:select {:name "puzzle-size"
+                   :on-change on-puzzle-size-changed
+                   :defaultValue current-size}]
+         (for [size sizes]
+           (into [:option {:value size} size])))
+   [:label "Select size"]])
 
 (defn- win-part []
   [:div
    [:h2 {:style {:color :green}} "Solved!"]
-   [:button {:onClick shuffle-again} "Play again"]])
+   [:button.waves-effect.waves-light.btn
+    {:onClick shuffle-again}
+    "Play again"]])
 
 (defn main-panel []
   (let [name (re-frame/subscribe [::subs/name])
@@ -58,14 +63,14 @@
         current-size (re-frame/subscribe [::subs/puzzle-size])
         puzzle (re-frame/subscribe [::subs/puzzle])
         is-solved? (re-frame/subscribe [::subs/is-solved?])]
-    [:div
+    [:div.container
      [:h1 "Hello to " @name]
      [:div
       {:style {:padding "10px"}}
-      [:div
-       (size-selector @sizes @current-size)
-       [:button {:onClick shuffle-again} "Shuffle"]]]
+      [:div.row
+       [:div.col.s2 (size-selector @sizes @current-size)]]
+       [:button.waves-effect.waves-light.btn.
+        {:onClick shuffle-again} "Shuffle"]]
      (tiles-container @puzzle @current-size tile-div)
      (if @is-solved?
        (win-part))]))
-
