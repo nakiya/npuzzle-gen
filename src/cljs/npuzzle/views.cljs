@@ -11,21 +11,25 @@
   (let [idx (.getAttribute (-> e .-target) "data-tileindex")]
     (re-frame/dispatch [::ev/move-tile (int idx)])))
 
+(defn- shuffle-again [e]
+  (re-frame/dispatch [::ev/shuffle-puzzle]))
+
 (defn- tile-div [idx tile]
-  [:div {:style {:text-align :center
-                 :padding "15px"
-                 :font-size "20px"
-                 :border (if (not= :space tile) "1px solid black" :none)
-                 :background (if (not= :space tile) :lightblue nil)
-                 :height "25px"
-                 :width "25px"
-                 ;;cursor = default for disabling caret on hover over text
-                 :cursor :default}
-         :onMouseDown on-tile-mouse-down
-         :data-tileindex idx}
-   (if (= :space tile)
-     " "
-     tile)])
+  (let [is-solved? (re-frame/subscribe [::subs/is-solved?])]
+    [:div {:style {:text-align :center
+                   :padding "15px"
+                   :font-size "20px"
+                   :border (if (not= :space tile) "1px solid black" :none)
+                   :background (if (not= :space tile) :lightblue nil)
+                   :height "25px"
+                   :width "25px"
+                   ;;cursor = default for disabling caret on hover over text
+                   :cursor :default}
+           :onMouseDown (if @is-solved? nil on-tile-mouse-down)
+           :data-tileindex idx}
+     (if (= :space tile)
+       " "
+       tile)]))
 
 (defn- tiles-container [puzzle size tile-fn]
   (into [:div {:style {:display :inline-grid
@@ -36,19 +40,32 @@
          (fn [idx tile]
            (tile-fn idx tile)) puzzle)))
 
+(defn- size-selector [sizes current-size]
+  (into [:select {:name "puzzle-size"
+                  :on-change on-puzzle-size-changed
+                  :defaultValue current-size}]
+        (for [size sizes]
+          (into [:option {:value size} size]))))
+
+(defn- win-part []
+  [:div
+   [:h2 {:style {:color :green}} "Solved!"]
+   [:button {:onClick shuffle-again} "Play again"]])
+
 (defn main-panel []
   (let [name (re-frame/subscribe [::subs/name])
         sizes (re-frame/subscribe [::subs/size-choices])
         current-size (re-frame/subscribe [::subs/puzzle-size])
-        puzzle (re-frame/subscribe [::subs/puzzle])]
+        puzzle (re-frame/subscribe [::subs/puzzle])
+        is-solved? (re-frame/subscribe [::subs/is-solved?])]
     [:div
      [:h1 "Hello to " @name]
      [:div
       {:style {:padding "10px"}}
-      (into [:select {:name "puzzle-size"
-                      :on-change on-puzzle-size-changed
-                      :defaultValue @current-size}]
-            (for [size @sizes]
-              (into [:option {:value size} size])))]
-     (tiles-container @puzzle @current-size tile-div)]))
+      [:div
+       (size-selector @sizes @current-size)
+       [:button {:onClick shuffle-again} "Shuffle"]]]
+     (tiles-container @puzzle @current-size tile-div)
+     (if @is-solved?
+       (win-part))]))
 

@@ -22,3 +22,8 @@
  ::puzzle
  (fn [db]
    (pzl/get-tiles (:puzzle db))))
+
+(re-frame/reg-sub
+ ::is-solved?
+ (fn [db]
+   (pzl/is-solved? (:puzzle db))))

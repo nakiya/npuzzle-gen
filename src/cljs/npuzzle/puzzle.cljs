@@ -103,3 +103,11 @@
    (if (> num-moves 0)
      (recur (random-move puzzle) (dec num-moves))
      puzzle)))
+
+(defn is-solved?
+  "Is the puzzle in solved state?"
+  [puzzle]
+  (let [size (get-size puzzle)
+        tiles (get-tiles puzzle)
+        solution (concat (for [i (range 1 (* size size))] i) '(:space))]
+    (= tiles solution)))

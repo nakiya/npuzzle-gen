@@ -19,6 +19,12 @@
                   (assoc :puzzle rnd-puzzle)))))
 
 (re-frame/reg-event-db
+ ::shuffle-puzzle
+ (fn-traced [db [_ _]]
+            (let [size (:size db)]
+              (assoc db :puzzle (pzl/shuffle-puzzle (pzl/make-puzzle size))))))
+
+(re-frame/reg-event-db
  ::move-tile
  (fn-traced [db [_ tile-index]]
             (let [coords (pzl/index->row-col (:puzzle db) tile-index)
