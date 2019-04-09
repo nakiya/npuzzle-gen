@@ -64,7 +64,7 @@
         puzzle (re-frame/subscribe [::subs/puzzle])
         is-solved? (re-frame/subscribe [::subs/is-solved?])]
     [:div.container
-     [:h1 "Hello to " @name]
+     [:h1 {:style {:color :skyblue}} "Hello to " @name]
      [:div
       {:style {:padding "10px"}}
       [:div.row
