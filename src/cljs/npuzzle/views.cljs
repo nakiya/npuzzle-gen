@@ -17,19 +17,9 @@
 
 (defn- tile-div [idx tile]
   (let [is-solved? (re-frame/subscribe [::subs/is-solved?])]
-    [:div {:style {:text-align :center
-                   :padding "15px"
-                   :font-size "20px"
-                   :border (if (not= :space tile) "1px solid black" :none)
-                   :border-radius "5px"
-                   :box-shadow (if (not= :space tile) "3px 3px 3px 3px #888888" :none)
-                   :background (if (not= :space tile) :burlywood nil)
-                   :height "60px"
-                   :width "60px"
-                   ;;cursor = default for disabling caret on hover over text
-                   :cursor :default}
-           :onMouseDown (if @is-solved? nil on-tile-mouse-down)
-           :data-tileindex idx}
+    [:div {:onClick (if @is-solved? nil on-tile-mouse-down)
+           :data-tileindex idx
+           :class (if (not= :space tile) "puzzle-tile" nil)}
      (if (= :space tile)
        " "
        tile)]))
